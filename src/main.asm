@@ -30,9 +30,7 @@ decimal:                         # etiqueta probar
     li a7, 34                   # mete en a7 el valor 34
     ecall                       # ejecuta la instruccion de a7, en este caso la 34 (imprimir hexadecimal)
 
-    li a0, 10                   # mete en a0 un 10
-    li a7, 11                   # mete en a7 un 11
-    ecall                       # ejecuta la instruccion de a7, en este caso la 11 (imprimir caracter), 10 en ascii es salto de linea
+    jal ra, imprimir_salto
 
     mv a0, t0                   # mueve a a0 lo que haya en t0
     li a7, 35                   # mete en a7 el valor 35
@@ -47,3 +45,9 @@ decimal:                         # etiqueta probar
 salir:                          # etiqueta salir
     li a7, 10                   # mete en a7 el valor 10
     ecall                       # ejecuta la instruccion de a7, en este caso la 10 (finalizar programa)
+
+imprimir_salto:
+    li a0, 10                   # mete en a0 un 10
+    li a7, 11                   # mete en a7 un 11
+    ecall                       # ejecuta la instruccion de a7, en este caso la 11 (imprimir caracter), 10 en ascii es salto de linea
+    ret
