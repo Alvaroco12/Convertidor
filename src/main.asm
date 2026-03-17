@@ -1,6 +1,17 @@
 .data
-menu_texto: .asciz "\n--- MENU DE CONVERTIDOR, QUE QUIERES HACER?---\n1. Introducir decimal\n2. Salir\nOpcion: "   # texto del menu
-numero: .word 45                # variable numero con valor 45
+menu_texto: .asciz "\n--- MENU DE CONVERTIDOR ---\n1. Decimal\n2. Binario\n3. Hexadecimal\n4. Salir\nOpcion: "   # texto del menu principal
+
+pedir_decimal: .asciz "\nIntroduce un numero decimal: "                           # texto para pedir un numero decimal
+pedir_binario: .asciz "\nIntroduce un numero binario: "                           # texto para pedir un numero binario
+pedir_hexadecimal: .asciz "\nIntroduce un numero hexadecimal: "                   # texto para pedir un numero hexadecimal
+
+texto_decimal: .asciz "\nDecimal: "                                               # texto para mostrar resultado en decimal
+texto_binario: .asciz "\nBinario: "                                               # texto para mostrar resultado en binario
+texto_hexadecimal: .asciz "\nHexadecimal: "                                       # texto para mostrar resultado en hexadecimal
+
+numero: .word 0                                                                   # variable para guardar el valor interno del numero
+buffer_binario: .space 33                                                         # espacio para guardar un binario escrito como texto
+buffer_hexadecimal: .space 33                                                     # espacio para guardar un hexadecimal escrito como texto
 
 .text                           # seccion de codigo
 .globl main                     # indica que main es la etiqueta principal del programa
@@ -16,31 +27,45 @@ menu:                           # etiqueta menu
     ecall                       # ejecuta la instruccion de a7, en este caso la 5 (leer entero), el numero se guarda en a0
 
     li t0, 1                    # mete en t0 un 1
-    beq a0, t0, decimal          # si a0 es igual a t0, salta a la etiqueta decimal
+    beq a0, t0, decimal         # si a0 es igual a t0, salta a la etiqueta decimal
 
     li t0, 2                    # mete en t0 un 2
+    beq a0, t0, binario           # si a0 es igual a t0, salta a la etiqueta binario
+
+    li t0, 3                    # mete en t0 un 3
+    beq a0, t0, hexadecimal     # si a0 es igual a t0, salta a la etiqueta hexadecimal
+
+    li t0, 4                    # mete en t0 un 4
     beq a0, t0, salir           # si a0 es igual a t0, salta a la etiqueta salir
 
-    j menu                      # si no ha metido ni 1 ni 2, vuelve al menu
+    j menu                      # si mete otro numero, vuelve al menu
 
-decimal:                         # etiqueta probar
+decimal:                        # etiqueta probar
     lw t0, numero               # carga en t0 el valor guardado en numero
     mv a0, t0                   # mueve a a0 lo que haya en t0
 
     li a7, 34                   # mete en a7 el valor 34
     ecall                       # ejecuta la instruccion de a7, en este caso la 34 (imprimir hexadecimal)
 
-    jal ra, imprimir_salto
+    jal ra, imprimir_salto      # va a la "funcion" imprimir salto y en ra guarda desde donde se llama a la funcion
 
     mv a0, t0                   # mueve a a0 lo que haya en t0
     li a7, 35                   # mete en a7 el valor 35
     ecall                       # ejecuta la instruccion de a7, en este caso la 35 (imprimir binario)
 
-    li a0, 10                   # mete en a0 un 10
-    li a7, 11                   # mete en a7 un 11
-    ecall                       # ejecuta la instruccion de a7, en este caso la 11 (imprimir caracter), 10 en ascii es salto de linea
+    jal ra, imprimir_salto      # va a la "funcion" imprimir salto y en ra guarda desde donde se llama a la funcion
 
     j menu                      # vuelve al menu
+
+binario:
+
+
+    j menu
+
+hexadecimal:
+
+
+    j menu
 
 salir:                          # etiqueta salir
     li a7, 10                   # mete en a7 el valor 10
@@ -50,4 +75,4 @@ imprimir_salto:
     li a0, 10                   # mete en a0 un 10
     li a7, 11                   # mete en a7 un 11
     ecall                       # ejecuta la instruccion de a7, en este caso la 11 (imprimir caracter), 10 en ascii es salto de linea
-    ret
+    ret                         # vuelve a la posicion donde apunta ra (donde se llamo la funcion)
