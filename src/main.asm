@@ -30,7 +30,7 @@ menu:                           # etiqueta menu
     beq a0, t0, decimal         # si a0 es igual a t0, salta a la etiqueta decimal
 
     li t0, 2                    # mete en t0 un 2
-    beq a0, t0, binario           # si a0 es igual a t0, salta a la etiqueta binario
+    beq a0, t0, binario         # si a0 es igual a t0, salta a la etiqueta binario
 
     li t0, 3                    # mete en t0 un 3
     beq a0, t0, hexadecimal     # si a0 es igual a t0, salta a la etiqueta hexadecimal
@@ -41,67 +41,41 @@ menu:                           # etiqueta menu
     j menu                      # si mete otro numero, vuelve al menu
 
 decimal:                        # etiqueta decimal
-
-    pedir numero
-    imprimir el decimal a binario con funcion imp_binario
-    funcion salto de linea
-    imprimir el decimal a hexadecimal con funcion imp_hexadecimal 
-
     lw t0, numero               # carga en t0 el valor guardado en numero
-    mv a0, t0                   # mueve a a0 lo que haya en t0
-
-    li a7, 34                   # mete en a7 el valor 34
-    ecall                       # ejecuta la instruccion de a7, en este caso la 34 (imprimir hexadecimal)
-
-    jal ra, imprimir_salto      # va a la "funcion" imprimir salto y en ra guarda desde donde se llama a la funcion
 
     mv a0, t0                   # mueve a a0 lo que haya en t0
-    li a7, 35                   # mete en a7 el valor 35
-    ecall                       # ejecuta la instruccion de a7, en este caso la 35 (imprimir binario)
+    jal ra, imp_hexadecimal     # llama a la funcion imp_hexadecimal
 
-    jal ra, imprimir_salto      # va a la "funcion" imprimir salto y en ra guarda desde donde se llama a la funcion
+    jal ra, imprimir_salto      # va a la funcion imprimir_salto
+
+    mv a0, t0                   # mueve a a0 lo que haya en t0
+    jal ra, imp_binario         # llama a la funcion imp_binario
+
+    jal ra, imprimir_salto      # va a la funcion imprimir_salto
 
     j menu                      # vuelve al menu
 
 binario:                        # etiqueta binario
-
-    pedir numero (texto)
-    pasar ese texto a numero decimal con la funcion binario_a_decimal
-    imprimir el decimal
-    funcion salto de linea
-    imprimir el decimal a hexadecimal con funcion imp_hexadecimal
-
     j menu
 
 hexadecimal:                    #etiqueta hexadecimal
-
-    pedir numero (texto)
-    pasar ese texto a numero decimal con la funcion hexadecimal_a_decimal
-    imprimir el decimal
-    funcion salto de linea
-    imprimir el decimal a binario con funcion imp_decimal
-
     j menu
 
 binario_a_decimal:              #etiqueta binario a decimal
-
-
     ret
 
 hexadecimal_a_decimal:          #etiqueta hexadecimal a decimal
-
-
     ret
 
-imp_binario:
+imp_binario:                    # etiqueta imp_binario
+    li a7, 35                   # mete en a7 el valor 35
+    ecall                       # ejecuta la instruccion de a7, en este caso la 35 (imprimir binario)
+    ret                         # vuelve a la posicion donde apunta ra
 
-
-    ret
-
-imp_hexadecimal:
-
-
-    ret
+imp_hexadecimal:                # etiqueta imp_hexadecimal
+    li a7, 34                   # mete en a7 el valor 34
+    ecall                       # ejecuta la instruccion de a7, en este caso la 34 (imprimir hexadecimal)
+    ret                         # vuelve a la posicion donde apunta ra
 
 salir:                          # etiqueta salir
     li a7, 10                   # mete en a7 el valor 10
