@@ -9,7 +9,7 @@ texto_decimal: .asciz "\nDecimal: "                                             
 texto_binario: .asciz "\nBinario: "                                               # texto para mostrar resultado en binario
 texto_hexadecimal: .asciz "\nHexadecimal: "                                       # texto para mostrar resultado en hexadecimal
 
-numero: .word 0                                                                   # variable para guardar el valor interno del numero
+numero: .word 1234                                                                # variable para guardar el valor interno del numero
 buffer_binario: .space 33                                                         # espacio para guardar un binario escrito como texto
 buffer_hexadecimal: .space 33                                                     # espacio para guardar un hexadecimal escrito como texto
 
@@ -40,7 +40,13 @@ menu:                           # etiqueta menu
 
     j menu                      # si mete otro numero, vuelve al menu
 
-decimal:                        # etiqueta probar
+decimal:                        # etiqueta decimal
+
+    pedir numero
+    imprimir el decimal a binario con funcion imp_binario
+    funcion salto de linea
+    imprimir el decimal a hexadecimal con funcion imp_hexadecimal 
+
     lw t0, numero               # carga en t0 el valor guardado en numero
     mv a0, t0                   # mueve a a0 lo que haya en t0
 
@@ -57,15 +63,45 @@ decimal:                        # etiqueta probar
 
     j menu                      # vuelve al menu
 
-binario:
+binario:                        # etiqueta binario
 
+    pedir numero (texto)
+    pasar ese texto a numero decimal con la funcion binario_a_decimal
+    imprimir el decimal
+    funcion salto de linea
+    imprimir el decimal a hexadecimal con funcion imp_hexadecimal
 
     j menu
 
-hexadecimal:
+hexadecimal:                    #etiqueta hexadecimal
 
+    pedir numero (texto)
+    pasar ese texto a numero decimal con la funcion hexadecimal_a_decimal
+    imprimir el decimal
+    funcion salto de linea
+    imprimir el decimal a binario con funcion imp_decimal
 
     j menu
+
+binario_a_decimal:              #etiqueta binario a decimal
+
+
+    ret
+
+hexadecimal_a_decimal:          #etiqueta hexadecimal a decimal
+
+
+    ret
+
+imp_binario:
+
+
+    ret
+
+imp_hexadecimal:
+
+
+    ret
 
 salir:                          # etiqueta salir
     li a7, 10                   # mete en a7 el valor 10
