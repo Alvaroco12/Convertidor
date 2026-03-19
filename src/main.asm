@@ -68,13 +68,29 @@ hexadecimal_a_decimal:          #etiqueta hexadecimal a decimal
     ret
 
 imp_binario:                    # etiqueta imp_binario
+    mv t1, a0                   # guarda en t1 el numero que ha llegado a la funcion
+
+    la a0, texto_binario        # carga en a0 la direccion del texto texto_binario
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    mv a0, t1                   # vuelve a mover a a0 el numero que se habia guardado en t1
     li a7, 35                   # mete en a7 el valor 35
     ecall                       # ejecuta la instruccion de a7, en este caso la 35 (imprimir binario)
+
     ret                         # vuelve a la posicion donde apunta ra
 
 imp_hexadecimal:                # etiqueta imp_hexadecimal
+    mv t1, a0                   # guarda en t1 el numero que ha llegado a la funcion
+
+    la a0, texto_hexadecimal    # carga en a0 la direccion del texto texto_hexadecimal
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    mv a0, t1                   # vuelve a mover a a0 el numero que se habia guardado en t1
     li a7, 34                   # mete en a7 el valor 34
     ecall                       # ejecuta la instruccion de a7, en este caso la 34 (imprimir hexadecimal)
+
     ret                         # vuelve a la posicion donde apunta ra
 
 salir:                          # etiqueta salir
