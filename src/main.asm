@@ -65,10 +65,70 @@ decimal:                        # etiqueta decimal
     j menu                      # vuelve al menu
 
 binario:                        # etiqueta binario
-    j menu
+    la a0, pedir_binario        # carga en a0 la direccion del texto pedir_binario
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    la a0, buffer_binario       # carga en a0 la direccion del buffer_binario
+    li a1, 33                   # mete en a1 el tamaño maximo del buffer
+    li a7, 8                    # mete en a7 el valor 8
+    ecall                       # ejecuta la instruccion de a7, en este caso la 8 (leer string)
+
+    la a0, buffer_binario       # carga en a0 la direccion del texto guardado en buffer_binario
+    jal ra, binario_a_decimal   # llama a la funcion binario_a_decimal y deja el resultado decimal en t0
+
+    la t1, numero               # carga en t1 la direccion de memoria de la variable numero
+    sw t0, 0(t1)                # guarda en numero el resultado decimal que ha quedado en t0
+
+    la a0, texto_decimal        # carga en a0 la direccion del texto texto_decimal
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    mv a0, t0                   # mueve a a0 lo que haya en t0
+    li a7, 1                    # mete en a7 el valor 1
+    ecall                       # ejecuta la instruccion de a7, en este caso la 1 (imprimir entero decimal)
+
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
+
+    mv a0, t0                   # mueve a a0 lo que haya en t0
+    jal ra, imp_hexadecimal     # llama a la funcion imp_hexadecimal
+
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
+
+    j menu                      # vuelve al menu
 
 hexadecimal:                    #etiqueta hexadecimal
-    j menu
+    la a0, pedir_hexadecimal    # carga en a0 la direccion del texto pedir_hexadecimal
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    la a0, buffer_hexadecimal   # carga en a0 la direccion del buffer_hexadecimal
+    li a1, 33                   # mete en a1 el tamaño maximo del buffer
+    li a7, 8                    # mete en a7 el valor 8
+    ecall                       # ejecuta la instruccion de a7, en este caso la 8 (leer string)
+
+    la a0, buffer_hexadecimal   # carga en a0 la direccion del texto guardado en buffer_hexadecimal
+    jal ra, hexadecimal_a_decimal   # llama a la funcion hexadecimal_a_decimal y deja el resultado decimal en t0
+
+    la t1, numero               # carga en t1 la direccion de memoria de la variable numero
+    sw t0, 0(t1)                # guarda en numero el resultado decimal que ha quedado en t0
+
+    la a0, texto_decimal        # carga en a0 la direccion del texto texto_decimal
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    mv a0, t0                   # mueve a a0 lo que haya en t0
+    li a7, 1                    # mete en a7 el valor 1
+    ecall                       # ejecuta la instruccion de a7, en este caso la 1 (imprimir entero decimal)
+
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
+
+    mv a0, t0                   # mueve a a0 lo que haya en t0
+    jal ra, imp_binario         # llama a la funcion imp_binario
+
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
+
+    j menu                      # vuelve al menu
 
 binario_a_decimal:              #etiqueta binario a decimal
     ret
