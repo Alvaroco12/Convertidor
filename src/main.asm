@@ -41,17 +41,26 @@ menu:                           # etiqueta menu
     j menu                      # si mete otro numero, vuelve al menu
 
 decimal:                        # etiqueta decimal
-    lw t0, numero               # carga en t0 el valor guardado en numero
+    la a0, pedir_decimal        # carga en a0 la direccion del texto pedir_decimal
+    li a7, 4                    # mete en a7 el valor 4
+    ecall                       # ejecuta la instruccion de a7, en este caso la 4 (imprimir string)
+
+    li a7, 5                    # mete en a7 el valor 5
+    ecall                       # ejecuta la instruccion de a7, en este caso la 5 (leer entero)
+
+    la t1, numero               # carga en t1 la dirección de memoria de la variable numero
+    sw a0, 0(t1)                # guarda lo que haya en a0 en la direccion de memoria de numero
+    mv t0, a0                   # mueve a t0 el numero que ha metido el usuario
 
     mv a0, t0                   # mueve a a0 lo que haya en t0
     jal ra, imp_hexadecimal     # llama a la funcion imp_hexadecimal
 
-    jal ra, imprimir_salto      # va a la funcion imprimir_salto
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
 
     mv a0, t0                   # mueve a a0 lo que haya en t0
     jal ra, imp_binario         # llama a la funcion imp_binario
 
-    jal ra, imprimir_salto      # va a la funcion imprimir_salto
+    jal ra, imprimir_salto      # llama a la funcion imprimir_salto
 
     j menu                      # vuelve al menu
 
