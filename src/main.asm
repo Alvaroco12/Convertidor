@@ -155,7 +155,60 @@ bucle_binario:                  # etiqueta del bucle
 fin_binario:                    # etiqueta final de la funcion
     ret                         # vuelve a la posicion donde apunta ra
 
-hexadecimal_a_decimal:          #etiqueta hexadecimal a decimal
+hexadecimal_a_decimal:          # etiqueta hexadecimal a decimal
+    li t0, 0
+
+bucle_hexadecimal:
+    lb t1, 0(a0)
+
+    beq t1, zero, fin_hexadecimal
+
+    li t2, 10
+    beq t1, t2, fin_hexadecimal
+
+    li t2, 48
+    blt t1, t2, fin_hexadecimal
+
+    li t2, 57
+    ble t1, t2, digito_numero
+
+    li t2, 65
+    blt t1, t2, comprobar_minuscula
+
+    li t2, 70
+    ble t1, t2, digito_mayuscula
+
+comprobar_minuscula:
+    li t2, 97
+    blt t1, t2, fin_hexadecimal
+
+    li t2, 102
+    ble t1, t2, digito_minuscula
+
+    j fin_hexadecimal
+
+digito_numero:
+    addi t1, t1, -48
+    j acumular_hexadecimal
+
+digito_mayuscula:
+    addi t1, t1, -55
+    j acumular_hexadecimal
+
+digito_minuscula:
+    addi t1, t1, -87
+
+acumular_hexadecimal:
+    li t2, 16
+    mul t0, t0, t2
+
+    add t0, t0, t1
+
+    addi a0, a0, 1
+
+    j bucle_hexadecimal
+
+fin_hexadecimal:
     ret
 
 imp_binario:                    # etiqueta imp_binario
