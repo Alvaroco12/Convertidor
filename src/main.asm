@@ -156,60 +156,60 @@ fin_binario:                    # etiqueta final de la funcion
     ret                         # vuelve a la posicion donde apunta ra
 
 hexadecimal_a_decimal:          # etiqueta hexadecimal a decimal
-    li t0, 0
+    li t0, 0                    # mete en t0 un 0, aqui se va a ir guardando el resultado decimal
 
-bucle_hexadecimal:
-    lb t1, 0(a0)
+bucle_hexadecimal:              # etiqueta del bucle
+    lb t1, 0(a0)                # carga en t1 el caracter actual del texto al que apunta a0
 
-    beq t1, zero, fin_hexadecimal
+    beq t1, zero, fin_hexadecimal   # si t1 vale 0, significa fin de cadena y termina la funcion
 
-    li t2, 10
-    beq t1, t2, fin_hexadecimal
+    li t2, 10                   # mete en t2 un 10
+    beq t1, t2, fin_hexadecimal # si t1 es salto de linea, termina la funcion
 
-    li t2, 48
-    blt t1, t2, fin_hexadecimal
+    li t2, 48                   # mete en t2 el ascii de '0'
+    blt t1, t2, fin_hexadecimal # si el caracter es menor que '0', termina la funcion
 
-    li t2, 57
-    ble t1, t2, digito_numero
+    li t2, 57                   # mete en t2 el ascii de '9'
+    ble t1, t2, digito_numero   # si el caracter esta entre '0' y '9', salta a digito_numero
 
-    li t2, 65
-    blt t1, t2, comprobar_minuscula
+    li t2, 65                   # mete en t2 el ascii de 'A'
+    blt t1, t2, comprobar_minuscula   # si el caracter es menor que 'A', comprueba minuscula
 
-    li t2, 70
-    ble t1, t2, digito_mayuscula
+    li t2, 70                   # mete en t2 el ascii de 'F'
+    ble t1, t2, digito_mayuscula    # si el caracter esta entre 'A' y 'F', salta a digito_mayuscula
 
 comprobar_minuscula:
-    li t2, 97
-    blt t1, t2, fin_hexadecimal
+    li t2, 97                   # mete en t2 el ascii de 'a'
+    blt t1, t2, fin_hexadecimal # si el caracter es menor que 'a', termina la funcion
 
-    li t2, 102
-    ble t1, t2, digito_minuscula
+    li t2, 102                  # mete en t2 el ascii de 'f'
+    ble t1, t2, digito_minuscula    # si el caracter esta entre 'a' y 'f', salta a digito_minuscula
 
-    j fin_hexadecimal
+    j fin_hexadecimal           # si no es nada valido, termina la funcion
 
 digito_numero:
-    addi t1, t1, -48
-    j acumular_hexadecimal
+    addi t1, t1, -48            # convierte el ascii de '0' a '9' en un numero de 0 a 9
+    j acumular_hexadecimal      # salta a acumular el resultado
 
 digito_mayuscula:
-    addi t1, t1, -55
-    j acumular_hexadecimal
+    addi t1, t1, -55            # convierte el ascii de 'A' a 'F' en un numero de 10 a 15
+    j acumular_hexadecimal      # salta a acumular el resultado
 
 digito_minuscula:
-    addi t1, t1, -87
+    addi t1, t1, -87            # convierte el ascii de 'a' a 'f' en un numero de 10 a 15
 
 acumular_hexadecimal:
-    li t2, 16
-    mul t0, t0, t2
+    li t2, 16                   # mete en t2 un 16
+    mul t0, t0, t2              # multiplica el resultado actual por 16
 
-    add t0, t0, t1
+    add t0, t0, t1              # suma al resultado el valor del digito actual
 
-    addi a0, a0, 1
+    addi a0, a0, 1              # avanza a0 al siguiente caracter del texto
 
-    j bucle_hexadecimal
+    j bucle_hexadecimal         # vuelve al principio del bucle
 
-fin_hexadecimal:
-    ret
+fin_hexadecimal:                # etiqueta final de la funcion
+    ret                         # vuelve a la posicion donde apunta ra
 
 imp_binario:                    # etiqueta imp_binario
     mv t1, a0                   # guarda en t1 el numero que ha llegado a la funcion
