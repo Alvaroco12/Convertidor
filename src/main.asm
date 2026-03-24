@@ -131,7 +131,29 @@ hexadecimal:                    #etiqueta hexadecimal
     j menu                      # vuelve al menu
 
 binario_a_decimal:              #etiqueta binario a decimal
-    ret
+    li t0, 0                    # mete en t0 un 0, aqui se va a ir guardando el resultado decimal
+
+bucle_binario:                  # etiqueta del bucle
+    lb t1, 0(a0)                # carga en t1 el caracter actual del texto al que apunta a0
+
+    beq t1, zero, fin_binario   # si t1 vale 0, significa fin de cadena y termina la funcion
+
+    li t2, 10                   # mete en t2 un 10
+    beq t1, t2, fin_binario     # si t1 es salto de linea, termina la funcion
+
+    addi t1, t1, -48            # convierte el caracter ascii en numero, '0' pasa a 0 y '1' pasa a 1
+
+    li t2, 2                    # mete en t2 un 2
+    mul t0, t0, t2              # multiplica el resultado actual por 2
+
+    add t0, t0, t1              # suma al resultado el bit actual
+
+    addi a0, a0, 1              # avanza a0 al siguiente caracter del texto
+
+    j bucle_binario             # vuelve al principio del bucle
+
+fin_binario:                    # etiqueta final de la funcion
+    ret                         # vuelve a la posicion donde apunta ra
 
 hexadecimal_a_decimal:          #etiqueta hexadecimal a decimal
     ret
